@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href="http://localhost:8080/"/>
+    <title>点赞功能</title>
+</head>
+<body>
+
+<span id="like_num">1</span>
+<img id="like_2002" name="dz" onclick="like('like_2002',1001,2002)" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1505724587,4017998373&fm=26&gp=0.jpg"></img>
+<img id="like_2003" name="dz" onclick="like('like_2003',1001,2003)" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1505724587,4017998373&fm=26&gp=0.jpg"></img>
+<script src="js/jquery-3.1.1.js"></script>
+<script type="text/javascript">
+    function load() {
+        $.get("dz/find?userId=1001",function (data) {
+            var nodeList = document.getElementsByName("dz");
+            for (var i = 0; i < nodeList.length; i++) {
+                var targetId = $(nodeList[i]).attr("id");
+                console.log(targetId);
+                var idArray = targetId.split("_");
+                for (var j = 0; j < data.obj.length; j++) {
+                    var index = data.obj[j].indexOf(idArray[1]);
+                    if (index >= 0) {
+                        $(nodeList[i]).attr("src","images/dianzan_ok.png");
+                    }
+                }
+            }
+
+        })
+    }
+
+    load();
+
+    function like(targetId,userId,videoId) {
+        $("#"+targetId).attr("src","images/dianzan_ok.png");
+        var num = $("#like_num").innerText;
+        num++;
+        $("#like_num").innerText=num;
+        $.post("dz/like",{userId:userId,videoId:videoId},function (data) {
+            console.log(data);
+        });
+    }
+</script>
+</body>
+</html>
